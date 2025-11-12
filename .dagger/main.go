@@ -169,7 +169,7 @@ func (m *Sftpgo) Release(
 
 	err := m.build(ctx, version).
 		WithRegistryAuth("ghcr.io", githubActor, githubToken).
-		Publish(ctx, fmt.Sprintf("oci://ghcr.io/lippdatacloud/helm-charts", githubAccount))
+		Publish(ctx, "oci://ghcr.io/lippdatacloud/helm-charts")
 	if err != nil {
 		return err
 	}
