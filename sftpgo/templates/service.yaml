@@ -85,6 +85,18 @@ spec:
       appProtocol: http
       {{- end }}
     {{- end }}
+    {{- if .Values.acme.enabled }}
+    - name: acme
+      port: {{ .Values.service.ports.acme.port }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) .Values.service.ports.acme.nodePort }}
+      nodePort: {{ .Values.service.ports.acme.nodePort }}
+      {{- end }}
+      targetPort: acme
+      protocol: TCP
+      {{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.GitVersion }}
+      appProtocol: http
+      {{- end }}
+    {{- end }}
     - name: telemetry
       port: 10000
       targetPort: telemetry
@@ -167,6 +179,18 @@ spec:
       nodePort: {{ $service.ports.http.nodePort }}
       {{- end }}
       targetPort: http
+      protocol: TCP
+      {{- if semverCompare ">=1.20-0" $.Capabilities.KubeVersion.GitVersion }}
+      appProtocol: http
+      {{- end }}
+    {{- end }}
+    {{- if and $.Values.acme.enabled $service.ports.acme }}
+    - name: acme
+      port: {{ required (printf "ACME service port is required for service %q" $name) $service.ports.acme.port }}
+      {{- if and (or (eq $service.type "NodePort") (eq $service.type "LoadBalancer")) $service.ports.acme.nodePort }}
+      nodePort: {{ $service.ports.acme.nodePort }}
+      {{- end }}
+      targetPort: acme
       protocol: TCP
       {{- if semverCompare ">=1.20-0" $.Capabilities.KubeVersion.GitVersion }}
       appProtocol: http

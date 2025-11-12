@@ -83,6 +83,10 @@ spec:
             - name: SFTPGO_HTTPD__BINDINGS__0__PORT
               value: "0"
             {{- end }}
+            {{- if .Values.acme.enabled }}
+            - name: SFTPGO_ACME__HTTP01_CHALLENGE__PORT
+              value: "{{ .Values.acme.port}}"
+            {{- end }}
             - name: SFTPGO_TELEMETRY__BIND_PORT
               value: "10000"
             - name: SFTPGO_TELEMETRY__BIND_ADDRESS
@@ -117,6 +121,11 @@ spec:
             {{- if .Values.httpd.enabled }}
             - name: http
               containerPort: {{ .Values.httpd.port}}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.acme.enabled }}
+            - name: acme
+              containerPort: {{ .Values.acme.port}}
               protocol: TCP
             {{- end }}
             - name: telemetry

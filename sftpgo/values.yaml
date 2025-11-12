@@ -36,7 +36,7 @@ sftpd:
 
 ftpd:
   # -- Enable FTP service.
-  enabled: false
+  enabled: true
 
   # -- Container FTP port. Set to 0 to disable the service. The 'enabled' flag may be removed in the future in favor of this setting.
   port: 2021
@@ -54,6 +54,13 @@ httpd:
 
   # -- Container HTTP port. Set to 0 to disable the service. The 'enabled' flag may be removed in the future in favor of this setting.
   port: 8080
+
+acme:
+  # -- Enable ACME HTTP-01 challenge service.
+  enabled: true
+
+  # -- Container ACME port for HTTP-01 challenges. Typically port 80.
+  port: 80
 
 # -- Application configuration.
 # See the [official documentation](https://docs.sftpgo.com/latest/config-file/).
@@ -180,9 +187,16 @@ service:
 
     http:
       # -- REST API service port.
-      port: 80
+      port: 8080
 
       # -- (int) REST API node port (when applicable).
+      nodePort:
+
+    acme:
+      # -- ACME HTTP-01 challenge service port.
+      port: 80
+
+      # -- (int) ACME node port (when applicable).
       nodePort:
 
   # -- Route external traffic to node-local or cluster-wide endoints.
