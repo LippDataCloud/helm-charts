@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"dagger/sftpgo/internal/dagger"
-	"fmt"
 	"strings"
 	"time"
 )
